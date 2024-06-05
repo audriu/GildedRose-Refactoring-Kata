@@ -21,54 +21,47 @@ class GildedRose {
     }
 
 
-    private static void handleQuality(Item item) {
-        if (!item.name.equals("Aged Brie")
-            && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            decreaseQuality(item);
-        } else {
-            if (item.quality < 50) {
-                item.quality = item.quality + 1;
-
-                if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                    if (item.sellIn < 11) {
-                        increaseQuality(item);
-                    }
-
-                    if (item.sellIn < 6) {
-                        increaseQuality(item);
-                    }
-                }
+    private void handleQuality(Item item) {
+        if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            increaseQuality(item);
+            if (item.sellIn < 6) {
+                increaseQuality(item);
+                increaseQuality(item);
+            } else if (item.sellIn < 11) {
+                increaseQuality(item);
             }
+        } else if (item.name.equals("Aged Brie")) {
+            increaseQuality(item);
+        } else {
+            decreaseQuality(item);
         }
     }
 
-    private static void handleExpiration(Item item) {
+    private void handleExpiration(Item item) {
         item.sellIn = item.sellIn - 1;
     }
 
-    private static boolean isExpired(Item item) {
+    private boolean isExpired(Item item) {
         return item.sellIn < 0;
     }
 
-    private static void handleExpired(Item item) {
-        if (!item.name.equals("Aged Brie")) {
-            if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                decreaseQuality(item);
-            } else {
-                item.quality = 0;
-            }
-        } else {
+    private void handleExpired(Item item) {
+        if (item.name.equals("Aged Brie")) {
             increaseQuality(item);
+        } else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            item.quality = 0;
+        } else {
+            decreaseQuality(item);
         }
     }
 
-    private static void increaseQuality(Item item) {
+    private void increaseQuality(Item item) {
         if (item.quality < 50) {
             item.quality = item.quality + 1;
         }
     }
 
-    private static void decreaseQuality(Item item) {
+    private void decreaseQuality(Item item) {
         if (item.quality > 0) {
             item.quality = item.quality - 1;
         }
