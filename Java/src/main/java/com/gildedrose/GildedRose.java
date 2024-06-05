@@ -32,7 +32,7 @@ class GildedRose {
                 }
             }
 
-            item.sellIn = item.sellIn - 1;
+            item.sellIn = decreaseSellIn(item);
 
             if (item.sellIn < 0) {
                 if (!item.name.equals("Aged Brie")) {
@@ -46,6 +46,10 @@ class GildedRose {
                 }
             }
         }
+    }
+
+    private static int decreaseSellIn(Item item) {
+        return item.sellIn - 1;
     }
 
     private static void increaseQuality(Item item) {
