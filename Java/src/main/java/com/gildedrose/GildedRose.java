@@ -9,20 +9,36 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (item.name.equals("Sulfuras, Hand of Ragnaros")) {
+            if (isItemNamed(item, "Sulfuras, Hand of Ragnaros")) {
                 continue;
             }
             handleQuality(item);
+            if (isConjured(item)) {
+                handleQuality(item);
+            }
+
             handleExpiration(item);
+
             if (isExpired(item)) {
+
                 handleExpired(item);
+                if (isConjured(item)) {
+                    handleExpired(item);
+                }
             }
         }
     }
 
+    private boolean isConjured(Item item) {
+        return item.name.startsWith("Conjured");
+    }
+
+    private boolean isItemNamed(Item item, String itemName) {
+        return item.name.equals(itemName) || item.name.equals("Conjured " + itemName);
+    }
 
     private void handleQuality(Item item) {
-        if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+        if (isItemNamed(item, "Backstage passes to a TAFKAL80ETC concert")) {
             increaseQuality(item);
             if (item.sellIn < 6) {
                 increaseQuality(item);
@@ -30,7 +46,7 @@ class GildedRose {
             } else if (item.sellIn < 11) {
                 increaseQuality(item);
             }
-        } else if (item.name.equals("Aged Brie")) {
+        } else if (isItemNamed(item, "Aged Brie")) {
             increaseQuality(item);
         } else {
             decreaseQuality(item);
@@ -46,9 +62,9 @@ class GildedRose {
     }
 
     private void handleExpired(Item item) {
-        if (item.name.equals("Aged Brie")) {
+        if (isItemNamed(item, "Aged Brie")) {
             increaseQuality(item);
-        } else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+        } else if (isItemNamed(item, "Backstage passes to a TAFKAL80ETC concert")) {
             item.quality = 0;
         } else {
             decreaseQuality(item);
